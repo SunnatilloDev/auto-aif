@@ -1,9 +1,15 @@
 const { default: axios } = require("axios");
+let express = require("express")
 const cron = require("node-cron");
 const Services = require("./services");
 let videosUrl = "https://aiffily.com/home/video/getList";
 let add = "https://aiffily.com/home/userVideo/add";
-
+let app = express()
+app.use(express.json())
+app.post("/addUser", Services.addUser)
+app.listen(3000, ()=>{
+    console.log("Server is running");
+})
 let bootstrap = async () => {
     Services.getTokens().then((tokens) => {
         tokens.map(async (token) => {

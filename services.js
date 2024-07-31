@@ -1,6 +1,6 @@
 const fs = require("fs");
 let taskListURL = "https://aiffily.com/home/level/getTaskList";
-const axios = require("axios")
+const axios = require("axios");
 class Services {
     async getTokens() {
         let users = JSON.parse(fs.readFileSync("./users.json").toString());
@@ -41,6 +41,27 @@ class Services {
             return item.taskStatus == 1;
         });
         return boughtList;
+    }
+    addUser(req, res) {
+        let { number, password } = req.body;
+        let users = JSON.parse(fs.readFileSync("./users.json").toString());
+        if (!number || !password) {
+            return res.status(400).send({
+                message: "Please send valid data",
+            });
+        }
+        if (users.find((item) => item.number == number)) {
+            return res.status(400).send({
+                message: "User already exists",
+            });
+        }
+        users.push({
+            number: number.toString(),
+            password: password.toString(),
+        });
+
+        fs.writeFileSync("./users.json", JSON.stringify(users));
+        res.send("Added successfully");
     }
 }
 
