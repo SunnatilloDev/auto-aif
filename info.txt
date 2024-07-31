@@ -1,0 +1,4 @@
+
+https://aiffily.com/home/userWithdraw/add
+{"id":"50","code":"593217","info":{"address":"TJJr2pwsohE54nDMSKwbcFQBNiNWrRP9eK","chain":"TRC20","currency":"USDT"},"amount":"123123","fundPassword":"716271","money":"123123.00"}
+Token

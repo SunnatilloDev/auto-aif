@@ -1,26 +1,22 @@
 const { default: axios } = require("axios");
-let express = require("express")
+let express = require("express");
 const cron = require("node-cron");
 const Services = require("./services");
 let videosUrl = "https://aiffily.com/home/video/getList";
 let add = "https://aiffily.com/home/userVideo/add";
-let app = express()
-app.use(express.json())
-app.post("/addUser", Services.addUser)
-app.listen(3000, ()=>{
+let app = express();
+app.use(express.json());
+app.post("/user", Services.addUser);
+app.put("/user/:number", Services.updateUser);
+app.listen(3000, () => {
     console.log("Server is running");
-})
+});
 let bootstrap = async () => {
     Services.getTokens().then((tokens) => {
         tokens.map(async (token) => {
             try {
                 let list = await Services.getTasks(token);
                 list.map(async (list) => {
-                    console.log({
-                        levelText: `(1/${list.times})`,
-                        levelImg: list.img,
-                        id: list.id,
-                    });
                     await axios
                         .post(
                             videosUrl,

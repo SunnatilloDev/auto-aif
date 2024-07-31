@@ -63,6 +63,25 @@ class Services {
         fs.writeFileSync("./users.json", JSON.stringify(users));
         res.send("Added successfully");
     }
+    updateUser(req, res) {
+        let { number } = req.params;
+        let { password } = req.body;
+        let users = JSON.parse(fs.readFileSync("./users.json").toString());
+        let userIndex = users.findIndex((item) => item.number == number);
+        if (userIndex == -1) {
+            return res.status(404).send({
+                message: "User not found",
+            });
+        }
+        users[userIndex] = {
+            ...users[userIndex],
+            password: password.toString(),
+        };
+        fs.writeFileSync("./users.json", JSON.stringify(users));
+        res.send({
+            message: "Updated Successfully",
+        });
+    }
 }
 
 module.exports = new Services();
