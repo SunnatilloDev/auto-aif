@@ -8,6 +8,7 @@ let app = express();
 app.use(express.json());
 app.post("/user", Services.addUser);
 app.put("/user/:number", Services.updateUser);
+app.delete("/user/:number", Services.deleteUser);
 app.listen(3000, () => {
     console.log("Server is running");
 });

@@ -82,6 +82,15 @@ class Services {
             message: "Updated Successfully",
         });
     }
+    deleteUser(req, res) {
+        let { number } = req.params;
+        let users = JSON.parse(fs.readFileSync("./users.json").toString());
+        let filteredUsers = users.filter((item) => item.number != number);
+        fs.writeFileSync("./users.json", JSON.stringify(filteredUsers));
+        res.send({
+            message: "Deleted successfully",
+        });
+    }
 }
 
 module.exports = new Services();
