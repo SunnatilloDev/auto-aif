@@ -46,9 +46,7 @@ const bootstrap = async () => {
                                 },
                             }
                         );
-                        console.log(i + 1);
                     }
-                    console.log(task.title + " Bajarildi");
                 }
             } catch (error) {
                 console.log(error);
@@ -59,16 +57,14 @@ const bootstrap = async () => {
     }
 };
 
-bootstrap();
-
-// cron.schedule(
-//     "15 11 * * *",
-//     () => {
-//         bootstrap();
-//         console.log("Code successfully was ran");
-//     },
-//     {
-//         scheduled: true,
-//         timezone: "Asia/Tashkent",
-//     }
-// );
+cron.schedule(
+    "15 11 * * *",
+    () => {
+        bootstrap();
+        console.log("Code successfully was ran");
+    },
+    {
+        scheduled: true,
+        timezone: "Asia/Tashkent",
+    }
+);
