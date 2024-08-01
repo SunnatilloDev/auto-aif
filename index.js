@@ -1,71 +1,74 @@
-const { default: axios } = require("axios");
-let express = require("express");
+const axios = require("axios");
+const express = require("express");
 const cron = require("node-cron");
 const Services = require("./services");
-let videosUrl = "https://aiffily.com/home/video/getList";
-let add = "https://aiffily.com/home/userVideo/add";
-let app = express();
+const videosUrl = "https://aiffily.com/home/video/getList";
+const add = "https://aiffily.com/home/userVideo/add";
+const app = express();
 app.use(express.json());
+
 app.post("/user", Services.addUser);
 app.put("/user/:number", Services.updateUser);
 app.delete("/user/:number", Services.deleteUser);
+
 app.listen(3000, () => {
     console.log("Server is running");
 });
-let bootstrap = async () => {
-    Services.getTokens().then((tokens) => {
-        tokens.map(async (token) => {
+
+const bootstrap = async () => {
+    try {
+        const tokens = await Services.getTokens();
+        for (const token of tokens) {
             try {
-                let list = await Services.getTasks(token);
-                list.map(async (list) => {
-                    await axios
-                        .post(
-                            videosUrl,
-                            {
-                                levelText: `(1/${list.times})`,
-                                levelImg: list.img,
-                                id: list.id,
+                const list = await Services.getTasks(token);
+                for (const task of list) {
+                    const response = await axios.post(
+                        videosUrl,
+                        {
+                            id: task.id,
+                        },
+                        {
+                            headers: {
+                                Token: token,
                             },
+                        }
+                    );
+
+                    const videos = response.data.list;
+
+                    for (let i = 0; i < task.times; i++) {
+                        await axios.post(
+                            add,
+                            { id: videos[i].id, levelId: task.id },
                             {
                                 headers: {
                                     Token: token,
                                 },
                             }
-                        )
-                        .then(async (res) => {
-                            let videos = res.data.list;
-
-                            for (let i = 0; i < list.times; i++) {
-                                setTimeout(() => {
-                                    axios.post(
-                                        add,
-                                        { id: videos[i].id, levelId: list.id },
-                                        {
-                                            headers: {
-                                                Token: token,
-                                            },
-                                        }
-                                    );
-                                }, 3000);
-                            }
-                        });
-                });
+                        );
+                        console.log(i + 1);
+                    }
+                    console.log(task.title + " Bajarildi");
+                }
             } catch (error) {
                 console.log(error);
             }
-        });
-    });
+        }
+    } catch (error) {
+        console.error("Error during bootstrap:", error);
+    }
 };
+
 bootstrap();
 
-cron.schedule(
-    "15 11 * * *",
-    () => {
-        bootstrap();
-        console.log("Code successfully was ran");
-    },
-    {
-        scheduled: true,
-        timezone: "Asia/Tashkent",
-    }
-);
+// cron.schedule(
+//     "15 11 * * *",
+//     () => {
+//         bootstrap();
+//         console.log("Code successfully was ran");
+//     },
+//     {
+//         scheduled: true,
+//         timezone: "Asia/Tashkent",
+//     }
+// );
