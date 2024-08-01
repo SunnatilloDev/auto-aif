@@ -33,19 +33,20 @@ let bootstrap = async () => {
                             }
                         )
                         .then(async (res) => {
-                            console.log(res.data);
                             let videos = res.data.list;
-                            await videos.map(async (item) => {
+
+                            for (let i = 0; i < list.times; i++) {
+                                
                                 await axios.post(
                                     add,
-                                    { id: item.id, levelId: list.id },
+                                    { id: videos[i].id, levelId: list.id },
                                     {
                                         headers: {
                                             Token: token,
                                         },
                                     }
                                 );
-                            });
+                            }
                         });
                 });
             } catch (error) {
@@ -54,6 +55,8 @@ let bootstrap = async () => {
         });
     });
 };
+bootstrap();
+
 cron.schedule(
     "15 11 * * *",
     () => {
