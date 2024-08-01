@@ -36,16 +36,17 @@ let bootstrap = async () => {
                             let videos = res.data.list;
 
                             for (let i = 0; i < list.times; i++) {
-                                
-                                await axios.post(
-                                    add,
-                                    { id: videos[i].id, levelId: list.id },
-                                    {
-                                        headers: {
-                                            Token: token,
-                                        },
-                                    }
-                                );
+                                setTimeout(() => {
+                                    axios.post(
+                                        add,
+                                        { id: videos[i].id, levelId: list.id },
+                                        {
+                                            headers: {
+                                                Token: token,
+                                            },
+                                        }
+                                    );
+                                }, 3000);
                             }
                         });
                 });
