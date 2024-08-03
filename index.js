@@ -27,7 +27,7 @@ const bootstrap = async () => {
                         {
                             id: task.id,
                         },
-                        {
+                        {  
                             headers: {
                                 Token: token,
                             },
@@ -37,6 +37,7 @@ const bootstrap = async () => {
                     const videos = response.data.list;
 
                     for (let i = 0; i < task.times; i++) {
+                        console.log(i + 1);
                         await axios.post(
                             add,
                             { id: videos[i].id, levelId: task.id },
@@ -47,16 +48,19 @@ const bootstrap = async () => {
                             }
                         );
                     }
+                    console.log(task.title + " Done");
                 }
+                console.log(token + " User is done");
             } catch (error) {
                 console.log(error);
             }
         }
+        console.log("ALL DONE");
     } catch (error) {
         console.error("Error during bootstrap:", error);
     }
 };
-
+bootstrap()
 cron.schedule(
     "15 11 * * *",
     () => {
