@@ -1,9 +1,10 @@
 const fs = require("fs");
 const taskListURL = "https://aiffily.com/home/level/getTaskList";
 const axios = require("axios");
+const User = require("./schemas/user.schema");
 class Services {
     async getTokens() {
-        const users = JSON.parse(fs.readFileSync("./users.json").toString());
+        const users = await User.find();
         const tokenPromises = users.map(async (user) => {
             const res = await axios.post(
                 "https://aiffily.com/main/user/login",
@@ -44,10 +45,13 @@ class Services {
         const boughtList = list.filter((item) => item.taskStatus == 1);
         return boughtList;
     }
-
-    addUser(req, res) {
+    async getAllUsers(req, res) {
+        let users = await User.find();
+        res.send(users);
+    }
+    async addUser(req, res) {
         const { number, password } = req.body;
-        const users = JSON.parse(fs.readFileSync("./users.json").toString());
+        const users = await User.find();
 
         if (!number || !password) {
             return res.status(400).send({
@@ -60,44 +64,27 @@ class Services {
             });
         }
 
-        users.push({
-            number: number.toString(),
-            password: password.toString(),
+        await User.create({
+            number,
+            password,
         });
 
-        fs.writeFileSync("./users.json", JSON.stringify(users));
-        res.send("Added successfully");
+        res.send({ message: "Added successfully" });
     }
 
-    updateUser(req, res) {
+    async updateUser(req, res) {
         const { number } = req.params;
         const { password } = req.body;
-        const users = JSON.parse(fs.readFileSync("./users.json").toString());
-        const userIndex = users.findIndex((item) => item.number == number);
+        await User.findOneAndUpdate({ number }, { password });
 
-        if (userIndex == -1) {
-            return res.status(404).send({
-                message: "User not found",
-            });
-        }
-
-        users[userIndex] = {
-            ...users[userIndex],
-            password: password.toString(),
-        };
-
-        fs.writeFileSync("./users.json", JSON.stringify(users));
         res.send({
             message: "Updated Successfully",
         });
     }
 
-    deleteUser(req, res) {
+    async deleteUser(req, res) {
         const { number } = req.params;
-        const users = JSON.parse(fs.readFileSync("./users.json").toString());
-        const filteredUsers = users.filter((item) => item.number != number);
-
-        fs.writeFileSync("./users.json", JSON.stringify(filteredUsers));
+        await User.deleteOne({ number });
         res.send({
             message: "Deleted successfully",
         });

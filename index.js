@@ -2,14 +2,19 @@ const axios = require("axios");
 const express = require("express");
 const cron = require("node-cron");
 const Services = require("./services");
+const { config } = require("dotenv");
+const { checkAdmin } = require("./middlewares");
 const videosUrl = "https://aiffily.com/home/video/getList";
 const add = "https://aiffily.com/home/userVideo/add";
+config();
 const app = express();
+require("./config");
 app.use(express.json());
 
-app.post("/user", Services.addUser);
-app.put("/user/:number", Services.updateUser);
-app.delete("/user/:number", Services.deleteUser);
+app.post("/user", checkAdmin, Services.addUser);
+app.get("/user", checkAdmin, Services.getAllUsers);
+app.put("/user/:number", checkAdmin, Services.updateUser);
+app.delete("/user/:number", checkAdmin, Services.deleteUser);
 
 app.listen(3000, () => {
     console.log("Server is running");
@@ -27,7 +32,7 @@ const bootstrap = async () => {
                         {
                             id: task.id,
                         },
-                        {  
+                        {
                             headers: {
                                 Token: token,
                             },
@@ -60,7 +65,6 @@ const bootstrap = async () => {
         console.error("Error during bootstrap:", error);
     }
 };
-bootstrap()
 cron.schedule(
     "15 11 * * *",
     () => {
