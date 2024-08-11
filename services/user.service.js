@@ -127,7 +127,7 @@ class Services {
   }
 
   async deleteUser(id) {
-    await User.deleteOne({ id });
+    await User.deleteOne({ _id: id });
     return { message: "Deleted successfully" };
   }
 }
