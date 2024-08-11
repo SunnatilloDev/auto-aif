@@ -99,7 +99,7 @@ class Services {
         } catch (error) {
           console.log(error);
 
-          return null; // Handle the error appropriately
+          return user; // Handle the error appropriately
         }
       })
     );
