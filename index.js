@@ -3,6 +3,7 @@ const cors = require("cors");
 const { config } = require("dotenv");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/user.route.js");
+const queuerRoutes = require("./routes/queuer.route.js");
 const cron = require("node-cron");
 config();
 connectDB();
@@ -14,10 +15,11 @@ const corsOptions = {
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
+app.use("/", express.static("uploads"));
 
 app.use(cors(corsOptions));
 app.use("/user", userRoutes);
-
+app.use("/queuer", queuerRoutes);
 app.listen(3000, () => {
   console.log("Server is running");
 });
