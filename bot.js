@@ -36,6 +36,7 @@ bot.onText(/\/start/, (msg) => {
   bot.sendMessage(
     chatId,
     `Assalomu Aleykum, Auto-AIF ga hush kelibsiz, iltimos familiya va ismingiz kiriting:
+    
 Misol: Aliyev Vali`
   );
 });
@@ -53,6 +54,7 @@ bot.on("message", async (msg) => {
       bot.sendMessage(
         chatId,
         `AIF ga registratsiya qilingan raqamingizni kiriting:
+
 Misol: 934445566`
       );
       break;
