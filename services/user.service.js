@@ -104,7 +104,6 @@ class Services {
       })
     );
 
-
     return users;
   }
 
@@ -127,8 +126,8 @@ class Services {
     return { message: "Updated Successfully", updatedUser };
   }
 
-  async deleteUser(number) {
-    await User.deleteOne({ number });
+  async deleteUser(id) {
+    await User.deleteOne({ id });
     return { message: "Deleted successfully" };
   }
 }
