@@ -35,7 +35,8 @@ bot.onText(/\/start/, (msg) => {
   userStates[chatId] = { step: 0, data: {} };
   bot.sendMessage(
     chatId,
-    "Assalomu Aleykum, Auto-AIF ga hush kelibsiz, iltimos ism va familiyangizni kiriting:"
+    `Assalomu Aleykum, Auto-AIF ga hush kelibsiz, iltimos familiya va ismingiz kiriting:
+Misol: Aliyev Vali`
   );
 });
 
@@ -51,7 +52,8 @@ bot.on("message", async (msg) => {
       state.step++;
       bot.sendMessage(
         chatId,
-        "AIF ga registratsiya qilingan raqamingizni kiriting:"
+        `AIF ga registratsiya qilingan raqamingizni kiriting:
+Misol: 934445566`
       );
       break;
     case 1:
