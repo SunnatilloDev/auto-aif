@@ -33,7 +33,10 @@ const userStates = {};
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
   userStates[chatId] = { step: 0, data: {} };
-  bot.sendMessage(chatId, "Welcome! Please enter your full name:");
+  bot.sendMessage(
+    chatId,
+    "Assalomu Aleykum, Auto-AIF ga hush kelibsiz, iltimos ism va familiyangizni kiriting:"
+  );
 });
 
 bot.on("message", async (msg) => {
@@ -46,17 +49,35 @@ bot.on("message", async (msg) => {
     case 0:
       state.data.fullName = msg.text;
       state.step++;
-      bot.sendMessage(chatId, "Please enter your phone number:");
+      bot.sendMessage(
+        chatId,
+        "AIF ga registratsiya qilingan raqamingizni kiriting:"
+      );
       break;
     case 1:
       state.data.number = msg.text;
       state.step++;
-      bot.sendMessage(chatId, "Please enter your password:");
+      bot.sendMessage(chatId, "AIF ga kiritgan parolingizni kiriting:");
       break;
     case 2:
       state.data.password = msg.text;
       state.step++;
-      bot.sendMessage(chatId, "Please send the payment proof image:");
+      bot.sendMessage(
+        chatId,
+        `
+Karta Raqami: 9860 3566 2047 7980
+I.F: Azizbek Rozmetov
+
+To'lov summasi: 20$ - 252.000 som
+
+To'lovdan so'ng chek tashashni unutmang!
+
+1-3 kun ichida adminlar ko'rib chiqib sizni qo'shishadi.
+
+Savollar va Takliflar: @TechSunnatillo
+
+        `
+      );
       break;
   }
 });
@@ -78,12 +99,18 @@ bot.on("photo", async (msg) => {
         const newQueuer = new Queuer(state.data);
         await newQueuer.save();
 
-        bot.sendMessage(chatId, "Your information has been saved. Thank you!");
+        bot.sendMessage(
+          chatId,
+          "Malumotlaringiz Yuborildi, Tez Orada Aloqaga Chiqamiz."
+        );
         delete userStates[chatId]; // Clear the user's state
       })
       .catch((err) => {
         console.error("Failed to download the file:", err);
-        bot.sendMessage(chatId, "Failed to save the image. Please try again.");
+        bot.sendMessage(
+          chatId,
+          "Qandaydir Xatolik, Keyinroq urinib ko'ring, savollar: @TechSunnatillo"
+        );
       });
   }
 });
