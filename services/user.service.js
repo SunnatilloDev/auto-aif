@@ -48,7 +48,6 @@ class Services {
   async getAllUsers() {
     let users = await User.find();
 
-    // Map over users and return a promise for each user
     users = await Promise.all(
       users.map(async (user) => {
         try {
@@ -72,8 +71,11 @@ class Services {
               howManyDone++;
             }
           });
+
           if (howManyDone == tasks.length) {
             user.isDone = true;
+          } else {
+            user.isDone = false;
           }
           // Fetch user's info
           let infoRes = await axios.post(
