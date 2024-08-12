@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/user.route.js");
 const queuerRoutes = require("./routes/queuer.route.js");
 const cron = require("node-cron");
+const { default: axios } = require("axios");
 config();
 connectDB();
 
@@ -23,14 +24,19 @@ app.use("/queuer", queuerRoutes);
 app.listen(3000, () => {
   console.log("Server is running");
 });
-
 const bootstrap = async () => {
   try {
-    const tokens = await require("./services/userService").getTokens();
-    for (const token of tokens) {
+    const tokens = await require("./services/user.service").getTokens();
+    let tokenIndex = 0;
+
+    while (tokenIndex < tokens.length) {
+      const token = tokens[tokenIndex];
       try {
-        const list = await require("./services/userService").getTasks(token);
-        for (const task of list) {
+        const list = await require("./services/user.service").getTasks(token);
+        let taskIndex = 0;
+
+        while (taskIndex < list.length) {
+          const task = list[taskIndex];
           const response = await axios.post(
             "https://aiffily.com/home/video/getList",
             { id: task.id },
@@ -42,7 +48,8 @@ const bootstrap = async () => {
           );
 
           const videos = response.data.list;
-          for (let i = 0; i < task.times; i++) {
+          let i = 0;
+          while (i <= task.times) {
             console.log(i + 1);
             await axios.post(
               "https://aiffily.com/home/userVideo/add",
@@ -53,13 +60,16 @@ const bootstrap = async () => {
                 },
               }
             );
+            i++;
           }
           console.log(task.title + " Done");
+          taskIndex++;
         }
         console.log(token + " User is done");
       } catch (error) {
         console.log(error);
       }
+      tokenIndex++;
     }
     console.log("ALL DONE");
   } catch (error) {
@@ -67,13 +77,14 @@ const bootstrap = async () => {
   }
 };
 
+
 // Uncomment to run the bootstrap immediately
-// bootstrap();
+bootstrap();
 
 cron.schedule(
-  "5 11 * * *",
-  () => {
-    bootstrap();
+  "05 11 * * *",
+  async () => {
+    await bootstrap();
     console.log("Code successfully was ran");
   },
   {
