@@ -7,12 +7,14 @@ const userSchema = new mongoose.Schema(
     password: String,
     isDone: {
       type: Boolean,
+      default: false,
     },
     todaysBalance: Number,
     allBalance: Number,
     packages: [String],
     isPaid: {
       type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

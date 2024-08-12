@@ -109,13 +109,20 @@ class Services {
     return users;
   }
 
-  async addUser(number, password, fullName) {
+  async addUser(number, password, fullName, isPaid) {
     const existingUser = await User.findOne({ number });
     if (existingUser) {
       throw new Error("User already exists");
     }
-
-    const newUser = await User.create({ number, password, fullName });
+    let user = {
+      number,
+      fullName,
+      password,
+    };
+    if (typeof isPaid != "undefined") {
+      user.isPaid = isPaid;
+    }
+    const newUser = await User.create(user);
     return { message: "Added successfully", newUser };
   }
 

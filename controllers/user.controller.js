@@ -12,8 +12,8 @@ class userController {
 
   async addUser(req, res) {
     try {
-      const { fullName, number, password } = req.body;
-      const result = await Services.addUser(number, password, fullName);
+      const { fullName, number, password, isPaid } = req.body;
+      const result = await Services.addUser(number, password, fullName, isPaid);
       res.status(201).send(result);
     } catch (error) {
       res.status(400).send({ message: error.message });
