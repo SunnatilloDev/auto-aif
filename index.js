@@ -16,7 +16,7 @@ const corsOptions = {
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 };
-app.use("/", express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
 
 app.use(cors(corsOptions));
 app.use("/user", userRoutes);
@@ -76,7 +76,6 @@ const bootstrap = async () => {
     console.error("Error during bootstrap:", error);
   }
 };
-
 
 // Uncomment to run the bootstrap immediately
 bootstrap();
