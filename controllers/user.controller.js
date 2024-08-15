@@ -42,7 +42,6 @@ class userController {
   }
   isAdmin(req, res) {
     let { login, password } = req.body;
-    console.log(req.body);
 
     if (login === "sunnatillo@gmail.com" && password === "sudoaptupdate") {
       res.send(true);

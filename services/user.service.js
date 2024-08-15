@@ -8,20 +8,26 @@ class Services {
   async getTokens() {
     const users = await User.find();
     const tokenPromises = users.map(async (user) => {
-      const res = await axios.post(loginURL, {
-        type: 1,
-        area_code: 998,
-        mobile: user.number,
-        email: "",
-        user_name: "",
-        password: user.password,
-        code: "",
-      });
-      return res.data.token;
+      try {
+        const res = await axios.post(loginURL, {
+          type: 1,
+          area_code: 998,
+          mobile: user.number,
+          email: "",
+          user_name: "",
+          password: user.password,
+          code: "",
+        });
+
+        return res.data.token;
+      } catch (error) {
+        console.log(error.message);
+      }
     });
 
     try {
-      const tokens = await Promise.all(tokenPromises);
+      let tokens = await Promise.all(tokenPromises);
+      tokens = tokens.filter((token) => token !== undefined);
       return tokens;
     } catch (error) {
       console.error("Error fetching tokens:", error);
