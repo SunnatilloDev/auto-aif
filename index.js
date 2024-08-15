@@ -85,7 +85,7 @@ const bootstrap = async () => {
 };
 
 // Uncomment to run the bootstrap immediately
-bootstrap();
+// bootstrap();
 
 cron.schedule(
   "05 11 * * *",
