@@ -21,7 +21,7 @@ app.use("/uploads", express.static("uploads"));
 app.use(cors(corsOptions));
 app.use("/user", userRoutes);
 app.use("/queuer", queuerRoutes);
-app.listen(3001, () => {
+app.listen(3000, () => {
   console.log("Server is running");
 });
 const bootstrap = async () => {
