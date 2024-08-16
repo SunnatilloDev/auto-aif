@@ -24,15 +24,19 @@ app.use("/queuer", queuerRoutes);
 app.listen(3000, () => {
   console.log("Server is running");
 });
+
 const bootstrap = async () => {
   try {
+    console.time("bootstrap");
     const tokens = await require("./services/user.service").getTokens();
+
     let tokenIndex = 0;
 
     while (tokenIndex < tokens.length) {
       const token = tokens[tokenIndex];
       try {
         const list = await require("./services/user.service").getTasks(token);
+
         let taskIndex = 0;
 
         while (taskIndex < list.length) {
@@ -79,6 +83,7 @@ const bootstrap = async () => {
       tokenIndex++;
     }
     console.log("ALL DONE");
+    console.timeEnd("bootstrap");
   } catch (error) {
     console.error("Error during bootstrap:", error);
   }
