@@ -7,5 +7,6 @@ router.post("/", userController.addUser);
 router.get("/", checkAdmin, userController.getAllUsers);
 router.put("/:id", checkAdmin, userController.updateUser);
 router.delete("/:id", checkAdmin, userController.deleteUser);
-router.post("/isAdmin", userController.isAdmin)
+router.post("/isAdmin", userController.isAdmin);
+router.post("/refreshUsersData", checkAdmin, userController.refreshUsersData);
 module.exports = router;

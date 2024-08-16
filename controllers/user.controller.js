@@ -9,7 +9,10 @@ class userController {
       res.status(500).send({ message: error.message });
     }
   }
-
+  async refreshUsersData(req, res) {
+    await Services.updateUsersData();
+    res.status(200).send({ message: "Data successfully updated" });
+  }
   async addUser(req, res) {
     try {
       const { fullName, number, password, isPaid } = req.body;

@@ -47,6 +47,7 @@ class Services {
     );
 
     const { list } = res.data;
+
     const boughtList = list.filter((item) => item.taskStatus == 1);
     return boughtList;
   }
@@ -72,41 +73,42 @@ class Services {
           });
 
           let token = tokenResponse.data.token;
-          let tasks = await this.getTasks(token);
+          if (token) {
+            let tasks = await this.getTasks(token);
 
-          user.packages = tasks.map((item) => item.title);
-          let howManyDone = 0;
-          tasks.map((task) => {
-            if (task.finishNums == task.times) {
-              howManyDone++;
+            user.packages = tasks.map((item) => item.title);
+            let howManyDone = 0;
+            tasks.map((task) => {
+              if (task.finishNums == task.times) {
+                howManyDone++;
+              }
+            });
+
+            if (howManyDone == tasks.length) {
+              user.isDone = true;
+            } else {
+              user.isDone = false;
             }
-          });
+            // Fetch user's info
+            let infoRes = await axios.post(
+              "https://aiffily.com/home/user/getInfo",
+              {},
+              { headers: { Token: token } }
+            );
 
-          if (howManyDone == tasks.length) {
-            user.isDone = true;
-          } else {
-            user.isDone = false;
+            user.allBalance = infoRes.data.info.balance;
+            user.fullName = infoRes.data.info.userReal.name;
+            // Fetch user's total info
+            let totalInfoRes = await axios.post(
+              "https://aiffily.com/home/user/getTotalInfo",
+              {},
+              { headers: { Token: token } }
+            );
+
+            user.todaysBalance = totalInfoRes.data.info.todayAmount;
+
+            await user.save();
           }
-          // Fetch user's info
-          let infoRes = await axios.post(
-            "https://aiffily.com/home/user/getInfo",
-            {},
-            { headers: { Token: token } }
-          );
-
-          user.allBalance = infoRes.data.info.balance;
-          user.fullName = infoRes.data.info.userReal.name;
-          // Fetch user's total info
-          let totalInfoRes = await axios.post(
-            "https://aiffily.com/home/user/getTotalInfo",
-            {},
-            { headers: { Token: token } }
-          );
-
-          user.todaysBalance = totalInfoRes.data.info.todayAmount;
-
-          await user.save();
-
           return user; // Return the updated user
         } catch (error) {
           console.log(error);
