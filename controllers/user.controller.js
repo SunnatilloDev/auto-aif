@@ -46,7 +46,7 @@ class userController {
     if (login === "sunnatillo@gmail.com" && password === "sudoaptupdate") {
       res.send(true);
     } else {
-      res.send(true);
+      res.send(false);
     }
   }
 }
