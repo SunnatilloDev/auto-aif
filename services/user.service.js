@@ -50,8 +50,12 @@ class Services {
     const boughtList = list.filter((item) => item.taskStatus == 1);
     return boughtList;
   }
-
   async getAllUsers() {
+    let users = await User.find();
+    return users;
+  }
+
+  async updateUsersData() {
     let users = await User.find();
 
     users = await Promise.all(
@@ -111,8 +115,6 @@ class Services {
         }
       })
     );
-
-    return users;
   }
 
   async addUser(number, password, fullName, isPaid) {

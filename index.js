@@ -4,6 +4,7 @@ const { config } = require("dotenv");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/user.route.js");
 const queuerRoutes = require("./routes/queuer.route.js");
+const userService = require("./services/user.service.js");
 const cron = require("node-cron");
 const { default: axios } = require("axios");
 config();
@@ -91,6 +92,18 @@ const bootstrap = async () => {
 
 // Uncomment to run the bootstrap immediately
 // bootstrap();
+
+cron.schedule(
+  "0 * * * *",
+  async () => {
+    await userService.updateUsersData();
+    console.log("Code successfully was ran");
+  },
+  {
+    scheduled: true,
+    timezone: "Asia/Tashkent",
+  }
+);
 
 cron.schedule(
   "05 11 * * *",
