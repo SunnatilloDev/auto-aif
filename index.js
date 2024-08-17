@@ -28,8 +28,8 @@ app.listen(3000, () => {
 
 const bootstrap = async () => {
   try {
-    console.time("bootstrap");
     const tokens = await require("./services/user.service").getTokens();
+    console.log(tokens);
 
     let tokenIndex = 0;
 
@@ -42,7 +42,6 @@ const bootstrap = async () => {
 
         while (taskIndex < list.length) {
           const task = list[taskIndex];
-          console.time("Task");
           const response = await axios.post(
             "https://aiffily.com/home/video/getList",
             { id: task.id },
@@ -52,11 +51,11 @@ const bootstrap = async () => {
               },
             }
           );
-          console.timeEnd("Task");
 
           const videos = response.data.list;
 
           let i = 0;
+
           while (i <= task.times) {
             try {
               await axios.post(
@@ -84,7 +83,6 @@ const bootstrap = async () => {
       tokenIndex++;
     }
     console.log("ALL DONE");
-    console.timeEnd("bootstrap");
   } catch (error) {
     console.error("Error during bootstrap:", error);
   }
@@ -116,4 +114,3 @@ cron.schedule(
     timezone: "Asia/Tashkent",
   }
 );
-

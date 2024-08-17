@@ -9,7 +9,7 @@ class Services {
     const users = await User.find();
     const tokenPromises = users.map(async (user) => {
       try {
-        const res = await axios.post(loginURL, {
+        let res = await axios.post(loginURL, {
           type: 1,
           area_code: 998,
           mobile: user.number,
@@ -36,20 +36,28 @@ class Services {
   }
 
   async getTasks(token) {
-    const res = await axios.post(
-      taskListURL,
-      {},
-      {
-        headers: {
-          Token: token,
-        },
-      }
-    );
+    let list = [];
 
-    const { list } = res.data;
+    while (list.length == 0) {
+      let res = await axios.post(
+        taskListURL,
+        {},
+        {
+          headers: {
+            Token: token,
+          },
+        }
+      );
+      if (res.data.list) {
+        list = res.data.list;
+      } else {
+        console.log(res.data);
+      }
+    }
 
     const boughtList = list.filter((item) => item.taskStatus == 1);
-    return boughtList;
+    list = boughtList;
+    return list;
   }
   async getAllUsers() {
     let users = await User.find();
