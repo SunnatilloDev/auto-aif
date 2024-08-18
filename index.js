@@ -104,7 +104,7 @@ cron.schedule(
 );
 
 cron.schedule(
-  "05 11 * * *",
+  "0 14 * * *",
   async () => {
     await bootstrap();
     console.log("Code successfully was ran");

@@ -18,7 +18,7 @@ class Services {
           password: user.password,
           code: "",
         });
-
+        
         return res.data.token;
       } catch (error) {
         console.log(error.message);
