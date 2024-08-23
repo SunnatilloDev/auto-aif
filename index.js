@@ -40,19 +40,21 @@ const bootstrap = async () => {
 
         let taskIndex = 0;
 
+        const videos = [];
         while (taskIndex < list.length) {
           const task = list[taskIndex];
-          const response = await axios.post(
-            "https://aiffily.com/home/video/getList",
-            { id: task.id },
-            {
-              headers: {
-                Token: token,
-              },
-            }
-          );
-
-          const videos = response.data.list;
+          for (let i = 0; i <= 3; i++) {
+            const response = await axios.post(
+              "https://aiffily.com/home/video/getList",
+              { id: task.id },
+              {
+                headers: {
+                  Token: token,
+                },
+              }
+            );
+            videos.push(...response.data.list);
+          }
 
           let i = 0;
 
@@ -89,8 +91,7 @@ const bootstrap = async () => {
 };
 
 // Uncomment to run the bootstrap immediately
-// bootstrap();
-
+bootstrap();
 cron.schedule(
   "0 * * * *",
   async () => {
