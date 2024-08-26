@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js; node bot.js",
+    "start": "node index.js & node bot.js",
     "dev:app": "nodemon index.js",
     "dev:bot": "nodemon bot.js"
   },
