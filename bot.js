@@ -42,6 +42,10 @@ Misol: Aliyev Vali`
 });
 
 bot.on("message", async (msg) => {
+  if (msg.text == "/start") {
+    return;
+  }
+
   const chatId = msg.chat.id;
   const state = userStates[chatId];
 
